@@ -9,8 +9,10 @@ import "./App.css";
 
 import { useStateContext } from "./Contexts/ContextProvider";
 import Home from "./Pages/Dashboard/Home";
-import YearDept from "./Pages/HomePage/YearDept";
+import YearDept from "./Pages/ExamCell/yeardept.jsx";
 import { useState } from "react";
+import ResultView from "./Pages/ExamCell/resultView.jsx";
+
 const App = () => {
   const {
     setCurrentColor,
@@ -96,6 +98,17 @@ const App = () => {
                     }
                   />
                 )}
+                <Route
+                  exact
+                  path="/resultView"
+                  element={
+                    <ResultView
+                      department={selectedDept}
+                      year={selectedyear}
+                      semester={semester}
+                    />
+                  }
+                />
                 <Route
                   path="*"
                   element={<Navigate to="/dashboard" replace />}

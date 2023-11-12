@@ -67,39 +67,39 @@ function Home() {
   ];
 
   return (
-    <main className="main-container">
-      <div className="main-title">
-        <h3>Dashboard</h3>
-      </div>
+    <main className="overflow-y-auto p-10 text-white text-opacity-95">
+      {/* <div className="flex justify-between">
+        <h3 className="text-black">Dashboard</h3>
+      </div> */}
 
-      <div className="main-cards">
-        <div className="card">
-          <div className="card-inner">
-            <h3>RESULT</h3>
-            <BsFillArchiveFill className="card_icon" />
+      <div className="md:grid md:grid-cols-4 md:gap-10 my-15 h-28 grid-cols-1 gap-5 mt-10">
+        <div className="bg-blue-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10">
+          <div className="flex items-center justify-between">
+            <h3 className="font-extrabold">RESULT</h3>
+            <BsFillArchiveFill className="text-2xl" />
           </div>
-          <h1>AS2023</h1>
+          <h1 className="text-3xl font-extrabold">AS2023</h1>
         </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>EXAM</h3>
-            <BsFillGrid3X3GapFill className="card_icon" />
+        <div className="bg-orange-500 flex flex-col justify-around  py-0 px-4 rounded-md h-full md:my-0 my-10">
+          <div className="flex items-center justify-between">
+            <h3 className="font-extrabold">Result</h3>
+            <BsFillGrid3X3GapFill className="text-2xl" />
           </div>
-          <h1>Timetable</h1>
+          <h1 className="text-3xl font-extrabold">Past Result</h1>
         </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>RE-EVALUATION </h3>
-            <BsPeopleFill className="card_icon" />
+        <div className="bg-green-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10">
+          <div className="flex items-center justify-between">
+            <h3 className="font-extrabold">Staff Directory</h3>
+            <BsPeopleFill className="text-2xl" />
           </div>
-          <h1>78</h1>
+          <h1 className="text-3xl font-extrabold">78</h1>
         </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>ALERTS</h3>
-            <BsFillBellFill className="card_icon" />
+        <div className="bg-red-500 flex flex-col justify-around py-2 px-4 rounded-md h-full md:my-0 my-10 mb-10">
+          <div className="flex items-center justify-between">
+            <h3 className="font-extrabold">Notifications</h3>
+            <BsFillBellFill className="text-2xl" />
           </div>
-          <h1>21</h1>
+          <h1 className="text-3xl font-extrabold">21</h1>
         </div>
       </div>
 
