@@ -125,6 +125,12 @@ function YearDept({ department, year, semester }) {
     setSelectedModule({ module, year, department });
   };
 
+  // useEffect(() => {
+  //   // Reset selected module and active modules when the year changes
+  //   setSelectedModule(null);
+  //   setActiveModules(Array(10).fill(false));
+  // }, [year]);
+
   return (
     <div className="md:flex md:flex-row h-screen">
       <div className="w-full md:w-2/5 md:h-1/2 m-5">

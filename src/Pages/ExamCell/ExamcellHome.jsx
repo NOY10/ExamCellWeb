@@ -3,9 +3,14 @@ import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Navbar, Footer, Sidebar, ThemeSettings } from "../../Components";
+import {
+  Navbar,
+  Footer,
+  SidebarExamCell,
+  ThemeSettings,
+} from "../../Components";
 import ResultView from "./resultView.jsx";
-import Home from "./Dashboard/Home";
+import Home from "./Dashboard/HomeE.jsx";
 import YearDept from "./yeardept.jsx";
 import { useStateContext } from "../../Contexts/ContextProvider.jsx";
 
@@ -46,11 +51,11 @@ function ExamcellHome({ user }) {
         </div>
         {activeMenu ? (
           <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-            <Sidebar handleDeptSelection={handleDeptSelection} />
+            <SidebarExamCell handleDeptSelection={handleDeptSelection} />
           </div>
         ) : (
           <div className="w-0 dark:bg-secondary-dark-bg">
-            <Sidebar handleDeptSelection={handleDeptSelection} />
+            <SidebarExamCell handleDeptSelection={handleDeptSelection} />
           </div>
         )}
         <div

@@ -14,7 +14,7 @@ import {
   BsFillGearFill,
 } from "react-icons/bs";
 
-const Sidebar = ({ handleDeptSelection }) => {
+const SidebarTeacher = ({ handleDeptSelection }) => {
   const { activeMenu, setActiveMenu, screenSize, currentColor } =
     useStateContext();
 
@@ -33,55 +33,22 @@ const Sidebar = ({ handleDeptSelection }) => {
   const [academicYears, setAcademicYears] = useState([
     {
       year: "First Year",
-      departments: [
-        "Architecture Department",
-        "Civil Engineering",
-        "Electronics & Communication Engineering",
-        "Electrical Engineering",
-        "Information Technology",
-        "Engineering Geology",
-        "Instrumentation and Control Engineering",
-      ],
+      departments: ["Information Technology"],
     },
     {
       year: "Second Year",
-      departments: [
-        "Architecture Department",
-        "Civil Engineering",
-        "Electronics & Communication Engineering",
-        "Electrical Engineering",
-        "Information Technology",
-        "Engineering Geology",
-        "Instrumentation and Control Engineering",
-      ],
+      departments: ["Information Technology"],
     },
     {
       year: "Third Year",
       departments: [
-        "Architecture Department",
-        "Civil Engineering",
-        "Electronics & Communication Engineering",
-        "Electrical Engineering",
         "Information Technology",
-        "Engineering Geology",
-        "Instrumentation and Control Engineering",
+        "Electronics & Communication Engineering",
       ],
     },
     {
       year: "Fourth Year",
-      departments: [
-        "Architecture Department",
-        "Civil Engineering",
-        "Electronics & Communication Engineering",
-        "Electrical Engineering",
-        "Information Technology",
-        "Engineering Geology",
-        "Instrumentation and Control Engineering",
-      ],
-    },
-    {
-      year: "Fifth Year",
-      departments: ["Architecture Department"],
+      departments: ["Information Technology"],
     },
   ]);
   const [activeYear, setActiveYear] = useState(null);
@@ -191,4 +158,4 @@ const Sidebar = ({ handleDeptSelection }) => {
   );
 };
 
-export default Sidebar;
+export default SidebarTeacher;
