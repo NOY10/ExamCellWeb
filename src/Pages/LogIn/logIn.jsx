@@ -1,8 +1,8 @@
 // logIn.jsx
 import React, { useState, useEffect } from "react";
 import "./logreg.css";
-import { IoMail } from "react-icons/Io";
-import { FaLock } from "react-icons/Fa";
+// import { IoMail } from "react-icons/Io";
+// import { FaLock } from "react-icons/Fa";
 import { login } from "../../features/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -66,16 +66,16 @@ function LogIn() {
           <h2>Login</h2>
           <div>
             <div className="input-box">
-              <span className="icon">
+              {/* <span className="icon">
                 <IoMail />
-              </span>
+              </span> */}
               <input type="email" id="em" required />
               <label>Email</label>
             </div>
             <div className="input-box">
-              <span className="icon">
+              {/* <span className="icon">
                 <FaLock />
-              </span>
+              </span> */}
               <input type="password" id="pw" required />
               <label>Password</label>
             </div>
