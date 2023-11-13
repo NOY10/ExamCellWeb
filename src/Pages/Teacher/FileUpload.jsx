@@ -115,6 +115,8 @@ function FileUpload({ moduleC, year, department }) {
       TeacherID: user.uid,
     }));
 
+    console.log(dataWithModuleAndClass);
+
     try {
       await axios.post(
         "https://examcellflutter.000webhostapp.com/filePicker.php",
