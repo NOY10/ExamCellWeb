@@ -20,24 +20,28 @@ function LogIn() {
 
       if (response.ok) {
         const data = await response.json();
-        dispatch(
-          login({
-            email: data["email"],
-            uid: data["userID"],
-            role: data["role"],
-            name: data["name"],
-          })
-        );
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            email: data["email"],
-            uid: data["userID"],
-            role: data["role"],
-            name: data["name"],
-          })
-        );
-        alert("Login");
+        if (data["role"] !== "Error") {
+          dispatch(
+            login({
+              email: data["email"],
+              uid: data["userID"],
+              role: data["role"],
+              name: data["name"],
+            })
+          );
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              email: data["email"],
+              uid: data["userID"],
+              role: data["role"],
+              name: data["name"],
+            })
+          );
+          alert("Login");
+        } else {
+          alert("Email or password is incorrect");
+        }
       } else {
         console.error("Error during login:", response.statusText);
       }

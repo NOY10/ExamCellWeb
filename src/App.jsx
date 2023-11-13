@@ -47,6 +47,7 @@ const App = () => {
           {user.role == "Examcell" && <ExamcellHome user={user} />}
           {user.role == "Tutor" && <TeacherHome user={user} />}
           {user.role == "Student" && <StudentHome user={user} />}
+          {user.role == "Error" && <Login />}
         </>
       )}
     </div>
