@@ -118,10 +118,10 @@ const ResultView = ({ department, year, semester }) => {
                       </th>
                     )}
                     {module.showPractical && (
-                      <th
-                        colSpan="1"
-                        className={thsty}
-                      >{`${module.totalCredit}`}</th>
+                      <th colSpan="1" className={thsty}>
+                        {/* {`${module.totalCredit}`} */}
+                        12
+                      </th>
                     )}
                     {!module.showPractical && (
                       <th colSpan="2" className={thsty}>
@@ -129,10 +129,10 @@ const ResultView = ({ department, year, semester }) => {
                       </th>
                     )}
                     {!module.showPractical && (
-                      <th
-                        colSpan="1"
-                        className={thsty}
-                      >{`${module.totalCredit}`}</th>
+                      <th colSpan="1" className={thsty}>
+                        {/* {`${module.totalCredit}`} */}
+                        12
+                      </th>
                     )}
                   </React.Fragment>
                 ))}
@@ -182,7 +182,8 @@ const ResultView = ({ department, year, semester }) => {
               <React.Fragment key={moduleIndex}>
                 {moduleIndex === 0 && (
                   <th className={thsty} rowSpan={data.length}>
-                    {module.totalCredits}
+                    {/* {module.totalCredits} */}
+                    1200
                   </th>
                 )}
               </React.Fragment>
