@@ -101,7 +101,7 @@ function ExamcellHome({ user }) {
 
               <Route path="/StaffInfo" element={<StaffInfo />} />
 
-              {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
           <Footer />
