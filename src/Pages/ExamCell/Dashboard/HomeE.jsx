@@ -25,47 +25,100 @@ import PopupDialog from "../../../Components/PopupDialog";
 function Home() {
   const data = [
     {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      name: "BEIT",
+      First: 2,
+      Second: 2,
+      amt: 6,
+      Third: 3, // Additional bar value for BEIT
+      Fourth: 5, // Additional bar value for BEIT
     },
     {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      name: "CE",
+      First: 2,
+      Second: 5,
+      amt: 6,
+      Third: 4, // Additional bar value for CE
+      Fourth: 3, // Additional bar value for CE
+    },
+    // Add more objects for other programs similarly
+    {
+      name: "EE",
+      First: 3,
+      Second: 3,
+      amt: 6,
+      Third: 3,
+      Fourth: 3,
     },
     {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      name: "BA",
+      First: 3,
+      Second: 3,
+      amt: 6,
+      Third: 3,
+      Fourth: 3,
     },
     {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      name: "Geo",
+      First: 3,
+      Second: 3,
+      amt: 6,
+      Third: 3,
+      Fourth: 3,
     },
     {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      name: "ICE",
+      First: 3,
+      Second: 3,
+      amt: 6,
+      Third: 3,
+      Fourth: 3,
     },
     {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      name: "ECE",
+      First: 3,
+      Second: 3,
+      amt: 6,
+      Third: 3,
+      Fourth: 3,
+    },
+  ];
+
+  const notis = [
+    {
+      "tid": "RUB201204006",
+      "mid": "CTE306",
+      "date": "2023-11-15 20:59:37",
+      "semester": "AS2023",
+      "name": "Mobile Application Development"
     },
     {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      "tid": "RUB200604001",
+      "mid": "DIS302",
+      "date": "2023-11-09 00:00:00",
+      "semester": "AS2023",
+      "name": "Object Oriented Analysis & Design"
     },
+    {
+      "tid": "RUB200704052",
+      "mid": "CTE305",
+      "date": "2023-11-09 00:00:00",
+      "semester": "AS2023",
+      "name": "Software Engineering"
+    },
+    {
+      "tid": "RUB201204008",
+      "mid": "CTE308",
+      "date": "2023-11-09 00:00:00",
+      "semester": "AS2023",
+      "name": "Advanced Web Technology"
+    },
+    {
+      "tid": "RUB201404011",
+      "mid": "CTE307",
+      "date": "2023-11-09 00:00:00",
+      "semester": "AS2023",
+      "name": "Human Computer Interaction"
+    }
   ];
 
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -77,6 +130,25 @@ function Home() {
   const cancelInsert = () => {
     setIsConfirmDialogOpen(false);
   };
+
+  const modulesSubmittedByDate = notis.reduce((acc, curr) => {
+    const date = curr.date.split(" ")[0]; // Extracting date part
+    if (acc[date]) {
+      acc[date]++;
+    } else {
+      acc[date] = 1;
+    }
+    return acc;
+  }, {});
+
+  const modulesSubmittedChartData = Object.keys(modulesSubmittedByDate).map(
+    (date) => ({
+      date,
+      count: modulesSubmittedByDate[date],
+    })
+  );
+
+  const reversedModulesSubmittedChartData = modulesSubmittedChartData.reverse();
 
   const confirm = async () => {
     setIsConfirmDialogOpen(false);
@@ -140,8 +212,9 @@ function Home() {
           </div>
         </div>
       </div>
-
+      
       <div className="charts">
+        
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width={500}
@@ -159,8 +232,10 @@ function Home() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="pv" fill="#8884d8" />
-            <Bar dataKey="uv" fill="#82ca9d" />
+            <Bar dataKey="First" fill="#363062" />
+            <Bar dataKey="Second" fill="#9BBEC8" />
+            <Bar dataKey="Third" fill="#427D9D" />
+            <Bar dataKey="Fourth" fill="#164863" />
           </BarChart>
         </ResponsiveContainer>
 
@@ -168,7 +243,7 @@ function Home() {
           <LineChart
             width={500}
             height={300}
-            data={data}
+            data={reversedModulesSubmittedChartData}
             margin={{
               top: 5,
               right: 30,
@@ -177,13 +252,13 @@ function Home() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Line
               type="monotone"
-              dataKey="pv"
+              dataKey="count"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             />

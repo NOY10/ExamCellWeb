@@ -8,19 +8,31 @@ import { selectUser } from "../features/userSlice";
 
 const Notification = () => {
   const { currentColor, close, setClose } = useStateContext();
-
   const [data, setData] = useState([]);
   const user = useSelector(selectUser);
 
-  if (user.role == "tutor") {
-    useEffect(() => {
-      fetch(
-        `https://resultsystemdb.000webhostapp.com/getTeacherReminder.php?tid=${user.uid}`
-      )
+  useEffect(() => {
+    if (user.role === "tutor") {
+      fetch(`https://resultsystemdb.000webhostapp.com/getTeacherReminder.php?tid=${user.uid}`)
         .then((response) => response.json())
         .then((notif) => {
-          // Handle the data here
-          setData(notif);
+          setData(notif.map(item => ({
+            ...item,
+            message: `Marksheet for ${item.code} Pending. Submit before ${item.date}`
+          })));
+          
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else if (user.role === "examcell") {
+      fetch("https://resultsystemdb.000webhostapp.com/notiData.php")
+        .then((response) => response.json())
+        .then((notif) => {
+          setData(notif.map(item => ({
+            ...item,
+            message: `Marks entered for ${item.mid} on ${item.date}`
+          })));
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -45,15 +57,9 @@ const Notification = () => {
     <div className="nav-item absolute right-5 md:right-40 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
         <div className="flex gap-3">
-          <p className="font-semibold text-lg dark:text-gray-200">
-            Notifications
-          </p>
-          <button
-            type="button"
-            className="text-white text-xs rounded p-1 px-2 bg-orange-theme "
-          >
-            {" "}
-            5 New
+          <p className="font-semibold text-lg dark:text-gray-200">Notifications</p>
+          <button type="button" className="text-white text-xs rounded p-1 px-2 bg-orange-theme">
+            {data.length} New
           </button>
         </div>
         <Button
