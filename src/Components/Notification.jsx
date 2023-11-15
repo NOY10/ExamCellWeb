@@ -27,6 +27,19 @@ const Notification = () => {
         });
     }, []);
   }
+  if (user.role == "examcell") {
+    useEffect(() => {
+      fetch(`https://resultsystemdb.000webhostapp.com/notiData.php`)
+        .then((response) => response.json())
+        .then((notif) => {
+          // Handle the data here
+          setData(notif);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }, []);
+  }
 
   return (
     <div className="nav-item absolute right-5 md:right-40 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -52,19 +65,38 @@ const Notification = () => {
         />
       </div>
       <div>
-        {data.length > 0 ? (
-          data.map((noti, index) => (
-            <div
-              className="mt-5 border-2 border-blue-500 rounded-lg p-2 flex justify-between items-center"
-              key={index}
-            >
-              <p className="text-sm text-blue-500">Send Mark for {noti.code}</p>
-              <p className="text-sm text-blue-500">{noti.date}</p>
-            </div>
-          ))
-        ) : (
-          <div className="mt-5 text-blue-500">Empty</div>
-        )}
+        {user.role == "tutor" && data.length > 0
+          ? data.map((noti, index) => (
+              <div
+                className="mt-5 border-2 border-blue-500 rounded-lg p-2 flex justify-between items-center"
+                key={index}
+              >
+                <p className="text-sm text-blue-500">
+                  Send Mark for {noti.code}
+                </p>
+                <p className="text-sm text-blue-500">{noti.date}</p>
+              </div>
+            ))
+          : user.role == "tutor" && (
+              <div className="mt-5 text-blue-500">Empty</div>
+            )}
+
+        {user.role == "examcell" && data.length > 0
+          ? data.map((noti, index) => (
+              <div
+                className="mt-5 border-2 border-blue-500 rounded-lg p-2"
+                key={index}
+              >
+                <p className="text-sm text-blue-500">{noti.code}</p>
+                <p className="text-sm text-blue-500">{noti.name}</p>
+                <p className="text-sm text-blue-500">
+                  submitted on {noti.date}
+                </p>
+              </div>
+            ))
+          : user.role == "examcell" && (
+              <div className="mt-5 text-blue-500">Empty</div>
+            )}
       </div>
     </div>
   );
