@@ -87,14 +87,6 @@ function ModuleTaught({ department, year, semester }) {
                   </div>
                 </div>
               ))}
-              <NavLink to={`/resultView`}>
-                <button
-                  className="viewResultButton"
-                  onClick={() => viewResult()}
-                >
-                  View Result
-                </button>
-              </NavLink>
             </div>
           ) : (
             <p>No modules found for the selected department and year.</p>

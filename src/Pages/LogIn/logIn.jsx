@@ -1,8 +1,6 @@
 // logIn.jsx
 import React, { useState, useEffect } from "react";
 import "./logreg.css";
-// import { IoMail } from "react-icons/Io";
-// import { FaLock } from "react-icons/Fa";
 import { login } from "../../features/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -14,28 +12,38 @@ function LogIn() {
       const email = document.getElementById("em").value;
       const password = document.getElementById("pw").value;
 
-      const response = await fetch(
-        `https://examcellflutter.000webhostapp.com/login.php?Email=${email}&Password=${password}`
-      );
+      const url = "https://resultsystemdb.000webhostapp.com/login.php";
+      const data = {
+        Email: email,
+        Password: password,
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(data),
+      });
 
       if (response.ok) {
-        const data = await response.json();
-        if (data["role"] !== "Error") {
+        const responseData = await response.json();
+        if (responseData["role"] !== "Error") {
           dispatch(
             login({
-              email: data["email"],
-              uid: data["userID"],
-              role: data["role"],
-              name: data["name"],
+              email: responseData["email"],
+              uid: responseData["userID"],
+              role: responseData["role"],
+              name: responseData["Name"],
             })
           );
           localStorage.setItem(
             "user",
             JSON.stringify({
-              email: data["email"],
-              uid: data["userID"],
-              role: data["role"],
-              name: data["name"],
+              email: responseData["email"],
+              uid: responseData["userID"],
+              role: responseData["role"],
+              name: responseData["Name"],
             })
           );
           alert("Login");
@@ -66,16 +74,10 @@ function LogIn() {
           <h2>Login</h2>
           <div>
             <div className="input-box">
-              {/* <span className="icon">
-                <IoMail />
-              </span> */}
               <input type="email" id="em" required />
               <label>Email</label>
             </div>
             <div className="input-box">
-              {/* <span className="icon">
-                <FaLock />
-              </span> */}
               <input type="password" id="pw" required />
               <label>Password</label>
             </div>

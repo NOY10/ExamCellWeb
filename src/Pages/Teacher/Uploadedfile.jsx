@@ -1,62 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import Loader from "react-js-loader";
-import Pending from "../img/pending.png";
+import Pending from "../img/noData.png";
 import PopupDialog from "../../Components/PopupDialog";
 
-function ModuleResult({ moduleC, year, department }) {
+function Uploadedfile({ data, isLoading, year, moduleC, department, user }) {
   const tableRef = useRef(null);
-
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const apiUrl = `https://resultsystemdb.000webhostapp.com/examcell/getModuleMark.php?code=${moduleC}`;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiUrl);
-        const result = await response.json();
-        setData(result);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [moduleC]);
-
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-
   const hasPracticalMarks =
     data.length > 0 && data.some((student) => student.practical !== null);
-
-  const sendR = async () => {
-    setIsConfirmDialogOpen(true);
-  };
-
-  const cancelInsert = () => {
-    setIsConfirmDialogOpen(false);
-  };
-
-  const confirm = async () => {
-    setIsConfirmDialogOpen(false);
-    // Rest of your code
-    try {
-      const date = new Date().toISOString().split("T")[0];
-      const tid = "RUB201204006";
-
-      const url = `https://resultsystemdb.000webhostapp.com/examcell/tutorReminder.php?tid=${tid}&code=${moduleC}&date=${date}`;
-
-      const response = await fetch(url);
-
-      if (response.ok) {
-        alert("Reminder send.");
-      }
-    } catch (error) {
-      console.error("Error during login:", error.message);
-    }
-  };
 
   return (
     <div>
@@ -72,9 +23,6 @@ function ModuleResult({ moduleC, year, department }) {
           </div>
         ) : data.length > 0 ? (
           <>
-            <p>{`Taught By ${data[0].TutorName}`}</p>
-            <p>{`Tutor ID: ${data[0].id}`}</p>
-
             <table
               ref={tableRef}
               className="dark:bg-white min-w-full divide-y divide-gray-200"
@@ -101,12 +49,6 @@ function ModuleResult({ moduleC, year, department }) {
                   <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-black">
                     Total
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-black">
-                    Credit
-                  </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-black">
-                    Remark
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -132,26 +74,27 @@ function ModuleResult({ moduleC, year, department }) {
                     <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-black">
                       {student.total}
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-black">
-                      {student.credit}
-                    </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-black">
-                      {student.remark}
-                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div>
+            <div className="flex items-center">
               <DownloadTableExcel
                 filename={`${year}_${department}_${moduleC}`}
                 sheet="users"
                 currentTableRef={tableRef.current}
               >
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Export Excel
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                  Download Excel
                 </button>
               </DownloadTableExcel>
+
+              {/* <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={onDelete}
+              >
+                Delete
+              </button> */}
             </div>
           </>
         ) : (
@@ -161,25 +104,19 @@ function ModuleResult({ moduleC, year, department }) {
               alt="pending"
               className="mb-4 w-24 h-24 object-contain"
             />
-            <p className="text-lg font-semibold mb-2">MarKsheet Pending...</p>
-            <button
-              className="bg-blue-500 text-white py-2 px-4 rounded"
-              onClick={sendR}
-            >
-              Send Reminder
-            </button>
+            <p className="text-lg font-semibold mb-2">No FileUploaded...</p>
           </div>
         )}
+        {/* <PopupDialog
+          isOpen={isConfirmDialogOpen}
+          onClose={cancelDelete}
+          onYesClick={confirmDelete}
+          title="Confirm Delete"
+          content="Are you sure you want to delete?"
+        /> */}
       </div>
-      <PopupDialog
-        isOpen={isConfirmDialogOpen}
-        onClose={cancelInsert}
-        onYesClick={confirm}
-        title="Confirm Insert"
-        content="Send Reminder?"
-      />
     </div>
   );
 }
 
-export default ModuleResult;
+export default Uploadedfile;

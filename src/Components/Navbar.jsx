@@ -29,7 +29,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </TooltipComponent>
 );
 
-const Navbar = ({ uid }) => {
+const Navbar = () => {
   const {
     currentColor,
     activeMenu,
@@ -73,7 +73,7 @@ const Navbar = ({ uid }) => {
       <div className="flex">
         <NavButton
           title="Notification"
-          dotColor="rgb(254, 201, 15)"
+          // dotColor="rgb(254, 201, 15)"
           customFunc={() => handleClick("notification")}
           color={currentColor}
           icon={<RiNotification3Line />}

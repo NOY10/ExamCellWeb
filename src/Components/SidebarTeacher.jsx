@@ -41,10 +41,7 @@ const SidebarTeacher = ({ handleDeptSelection }) => {
     },
     {
       year: "Third Year",
-      departments: [
-        "Information Technology",
-        "Electronics & Communication Engineering",
-      ],
+      departments: ["Information Technology"],
     },
     {
       year: "Fourth Year",

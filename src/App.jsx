@@ -12,6 +12,7 @@ import { selectUser } from "./features/userSlice";
 import ExamcellHome from "./Pages/ExamCell/ExamcellHome.jsx";
 import TeacherHome from "./Pages/Teacher/TeacherHome.jsx";
 import StudentHome from "./Pages/Student/StudentHome.jsx";
+import StaffInfo from "./Pages/ExamCell/StaffInfo.jsx";
 
 const App = () => {
   const {
@@ -44,9 +45,9 @@ const App = () => {
         </Routes>
       ) : (
         <>
-          {user.role == "Examcell" && <ExamcellHome user={user} />}
-          {user.role == "Tutor" && <TeacherHome user={user} />}
-          {user.role == "Student" && <StudentHome user={user} />}
+          {user.role == "examcell" && <ExamcellHome user={user} />}
+          {user.role == "tutor" && <TeacherHome user={user} />}
+          {user.role == "student" && <StudentHome user={user} />}
           {user.role == "Error" && <Login />}
         </>
       )}

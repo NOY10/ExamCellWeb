@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import axios from "axios";
-import PopupDialog from "./PopupDialog";
+import PopupDialog from "../../Components/PopupDialog";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import * as XLSX from "xlsx";
 import excel from "./images.jpeg";
+import Uploadedfile from "./Uploadedfile";
 
 function FileUpload({ moduleC, year, department }) {
   const [data, setData] = useState([]);
@@ -33,8 +34,6 @@ function FileUpload({ moduleC, year, department }) {
 
         const studentsWithModuleAndClass = parsedData.map((student) => ({
           ...student,
-          ModuleCode: moduleC,
-          TeacherID: user.uid,
         }));
 
         setData(studentsWithModuleAndClass);
@@ -42,21 +41,6 @@ function FileUpload({ moduleC, year, department }) {
         setFileImage(excel);
       };
     }
-  };
-
-  const generateImagePreview = (workbook) => {
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-
-    const ws = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
-
-    const htmlString = XLSX.utils.sheet_to_html(sheet);
-    const blob = new Blob([htmlString], { type: "image/svg+xml" });
-
-    const img = new Image();
-    img.src = URL.createObjectURL(blob);
-
-    return img.src;
   };
 
   const handleDragOver = (e) => {
@@ -82,11 +66,10 @@ function FileUpload({ moduleC, year, department }) {
         const sheet = workbook.Sheets[sheetName];
         const parsedData = XLSX.utils.sheet_to_json(sheet);
 
-        const studentsWithModuleAndClass = parsedData.map((student) => ({
-          ...student,
-          ModuleCode: moduleC,
-          TeacherID: user.uid,
-        }));
+        const studentsWithModuleAndClass = parsedData.map((student) => {
+          const { [Object.keys(student)[0]]: _, ...rest } = student;
+          return rest;
+        });
 
         setData(studentsWithModuleAndClass);
       };
@@ -109,24 +92,115 @@ function FileUpload({ moduleC, year, department }) {
 
   const confirm = async () => {
     setIsConfirmDialogOpen(false);
+
     const dataWithModuleAndClass = data.map((student) => ({
       ...student,
-      ModuleCode: moduleC,
-      TeacherID: user.uid,
+      code: moduleC,
+      tid: user.uid,
+      dateOfExam: "2023-11-22",
+      semester: "AS2023",
+      ID: `0${String(student.ID)}`, // Ensure ID is treated as a string
     }));
 
     console.log(dataWithModuleAndClass);
 
     try {
-      await axios.post(
-        "https://examcellflutter.000webhostapp.com/filePicker.php",
-        dataWithModuleAndClass
-      );
-      console.log("Data sent to the server successfully");
+      const url = "https://resultsystemdb.000webhostapp.com/addMark.php";
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          dataWithModuleAndClass: JSON.stringify(dataWithModuleAndClass),
+        }),
+      });
+
+      if (response.ok) {
+        // const result = await response.text();
+        // console.log(result);
+        setClick(!click);
+        alert("Data inserted successfully!");
+      } else {
+        console.error("Error inserting data:", response.statusText);
+        alert("Failed to insert data. Please check the console for details.");
+      }
     } catch (error) {
-      console.error("Error sending data to the server:", error);
+      console.error("Error inserting data:", error);
+      alert("Failed to insert data. Please check the console for details.");
     }
   };
+
+  //delete btn
+  const [isConfirmDialogOpenDelete, setIsConfirmDialogOpenDelete] =
+    useState(false);
+
+  const fetchDelete = async () => {
+    try {
+      const url = `https://resultsystemdb.000webhostapp.com/Tutor/deleteMark.php?code=${moduleC}`;
+
+      // Move the fetch logic outside of useEffect
+      const response = await fetch(url);
+      if (response.ok) {
+        setFileImage(null);
+        setDataIModule([]);
+        setSelectedFile(null);
+        alert("Data deleted");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert("NO");
+    }
+  };
+
+  const onDelete = async () => {
+    setIsConfirmDialogOpenDelete(true);
+  };
+
+  const cancelDelete = () => {
+    setIsConfirmDialogOpenDelete(false);
+  };
+
+  const confirmDelete = async () => {
+    setIsConfirmDialogOpenDelete(false);
+    try {
+      // Move the useEffect outside of the confirmDelete function
+      fetchDelete();
+    } catch (error) {
+      console.error("Error deleting data to the server:", error);
+      alert("NO");
+    }
+  };
+
+  // Individual Module data
+
+  const [dataIModule, setDataIModule] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const apiUrl = `https://resultsystemdb.000webhostapp.com/getUndeclaredMark.php?tid=${user.uid}&code=${moduleC}`;
+  const [click, setClick] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(apiUrl);
+
+        if (response.ok) {
+          const result = await response.json();
+          setDataIModule(result);
+        } else {
+          console.error("Error fetching data:", response.statusText);
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [moduleC, click]);
 
   return (
     <div>
@@ -139,26 +213,43 @@ function FileUpload({ moduleC, year, department }) {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          {fileImage && (
-            <img
-              src={fileImage}
-              alt="Excel Preview"
-              className="w-8 h-8 object-contain rounded"
-              style={{ border: "2px solid #ccc", borderRadius: "8px" }}
-            />
-          )}
-          {!fileImage && (
-            <div className="drag-box">
-              <MdCloudUpload className="text-blue-500 text-4xl" />
-              <p>Drag & Drop Excel File Here</p>
+          {dataIModule.length > 0 ? (
+            <div>
+              <img
+                src={excel}
+                alt="Excel Preview"
+                className="w-8 h-8 object-contain rounded"
+                style={{ border: "2px solid #ccc", borderRadius: "8px" }}
+              />
+              <p className="text-xs mt-2">{`${moduleC}.xlsx`}</p>
             </div>
+          ) : (
+            <>
+              {fileImage && (
+                <div>
+                  <img
+                    src={fileImage}
+                    alt="Excel Preview"
+                    className="w-8 h-8 object-contain rounded"
+                    style={{ border: "2px solid #ccc", borderRadius: "8px" }}
+                  />
+                  <p className="text-xs mt-2">{`${moduleC}.xlsx`}</p>
+                </div>
+              )}
+              {!fileImage && (
+                <div className="drag-box">
+                  <MdCloudUpload className="text-blue-500 text-4xl" />
+                  <p>Drag & Drop Excel File Here</p>
+                </div>
+              )}
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept=".xlsx, .xls"
+              />
+            </>
           )}
-          <input
-            type="file"
-            className="hidden"
-            onChange={handleFileChange}
-            accept=".xlsx, .xls"
-          />
           {selectedFile && (
             <div className="selected-file-box mt-4">
               <p className="font-medium text-gray-700">{selectedFile.name}</p>
@@ -172,49 +263,54 @@ function FileUpload({ moduleC, year, department }) {
           )}
         </div>
 
-        <div className="mt-4">
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
-            onClick={() => document.querySelector('input[type="file"]').click()}
-          >
-            Select File
-          </button>
-          <button
-            className="bg-green-500 text-white py-2 px-4 rounded"
-            onClick={insertData}
-          >
-            Upload Data
-          </button>
-        </div>
-
-        {data.length > 0 && (
+        {dataIModule.length === 0 && (
           <div className="mt-4">
-            <table className="table">
-              <thead>
-                <tr>
-                  {Object.keys(data[0]).map((key) => (
-                    <th key={key}>{key}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row, index) => (
-                  <tr key={index}>
-                    {Object.values(row).map((value, index) => (
-                      <td key={index}>{value}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
+              onClick={() =>
+                document.querySelector('input[type="file"]').click()
+              }
+            >
+              Select File
+            </button>
+            <button
+              className="bg-green-500 text-white py-2 px-4 rounded"
+              onClick={insertData}
+            >
+              Upload Data
+            </button>
           </div>
         )}
+
+        <Uploadedfile
+          data={dataIModule}
+          isLoading={isLoading}
+          year={year}
+          moduleC={moduleC}
+          department={department}
+        />
+        {dataIModule.length !== 0 && (
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            onClick={onDelete}
+          >
+            Delete
+          </button>
+        )}
+
         <PopupDialog
           isOpen={isConfirmDialogOpen}
           onClose={cancelInsert}
           onYesClick={confirm}
           title="Confirm Insert"
           content="Are you sure you want to insert this data?"
+        />
+        <PopupDialog
+          isOpen={isConfirmDialogOpenDelete}
+          onClose={cancelDelete}
+          onYesClick={confirmDelete}
+          title="Confirm Delete"
+          content="Are you sure you want to delete?"
         />
       </main>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BsFillArchiveFill,
   BsFillGrid3X3GapFill,
@@ -19,6 +19,8 @@ import {
   Line,
 } from "recharts";
 import "./Home.css";
+import { NavLink } from "react-router-dom";
+import PopupDialog from "../../../Components/PopupDialog";
 
 function Home() {
   const data = [
@@ -66,6 +68,36 @@ function Home() {
     },
   ];
 
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+
+  const Declare = async () => {
+    setIsConfirmDialogOpen(true);
+  };
+
+  const cancelInsert = () => {
+    setIsConfirmDialogOpen(false);
+  };
+
+  const confirm = async () => {
+    setIsConfirmDialogOpen(false);
+    try {
+      const date = new Date().toISOString().split("T")[0];
+      const semester = "AS2023";
+      const status = "1";
+
+      const url = `https://resultsystemdb.000webhostapp.com/examcell/declare.php?semester=${semester}&date=${date}&status=${status}`;
+
+      // Move the fetch logic outside of useEffect
+      const response = await fetch(url);
+      if (response.ok) {
+        alert("Result Declare");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert("NO");
+    }
+  };
+
   return (
     <main className="overflow-y-auto p-10 text-white text-opacity-95">
       {/* <div className="flex justify-between">
@@ -73,33 +105,39 @@ function Home() {
       </div> */}
 
       <div className="md:grid md:grid-cols-4 md:gap-10 my-15 h-28 grid-cols-1 gap-5 mt-10">
-        <div className="bg-blue-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10">
+        <div className="bg-blue-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10 cursor-pointer">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold">RESULT</h3>
             <BsFillArchiveFill className="text-2xl" />
           </div>
           <h1 className="text-3xl font-extrabold">AS2023</h1>
         </div>
-        <div className="bg-orange-500 flex flex-col justify-around  py-0 px-4 rounded-md h-full md:my-0 my-10">
+        <div className="bg-orange-500 flex flex-col justify-around  py-0 px-4 rounded-md h-full md:my-0 my-10 cursor-pointer">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold">Result</h3>
             <BsFillGrid3X3GapFill className="text-2xl" />
           </div>
           <h1 className="text-3xl font-extrabold">Past Result</h1>
         </div>
-        <div className="bg-green-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10">
-          <div className="flex items-center justify-between">
-            <h3 className="font-extrabold">Staff Directory</h3>
-            <BsPeopleFill className="text-2xl" />
+        <NavLink to={"/StaffInfo"}>
+          <div className="bg-green-500 flex flex-col justify-around py-0 px-4 rounded-md h-full md:my-0 my-10 cursor-pointer">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold">Staff Directory</h3>
+              <BsPeopleFill className="text-2xl" />
+            </div>
+
+            <h1 className="text-3xl font-extrabold">78</h1>
           </div>
-          <h1 className="text-3xl font-extrabold">78</h1>
-        </div>
-        <div className="bg-red-500 flex flex-col justify-around py-2 px-4 rounded-md h-full md:my-0 my-10 mb-10">
+        </NavLink>
+
+        <div
+          className="bg-red-500 flex flex-col justify-around py-2 px-4 rounded-md h-full md:my-0 my-10 mb-10 cursor-pointer"
+          onClick={Declare}
+        >
           <div className="flex items-center justify-between">
-            <h3 className="font-extrabold">Notifications</h3>
+            <h3 className="font-extrabold">Declaration</h3>
             <BsFillBellFill className="text-2xl" />
           </div>
-          <h1 className="text-3xl font-extrabold">21</h1>
         </div>
       </div>
 
@@ -153,6 +191,14 @@ function Home() {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      <PopupDialog
+        isOpen={isConfirmDialogOpen}
+        onClose={cancelInsert}
+        onYesClick={confirm}
+        title="Confirm Insert"
+        content="Declare the Result for AS2023"
+      />
     </main>
   );
 }

@@ -13,6 +13,7 @@ import ResultView from "./resultView.jsx";
 import Home from "./Dashboard/HomeE.jsx";
 import YearDept from "./yeardept.jsx";
 import { useStateContext } from "../../Contexts/ContextProvider.jsx";
+import StaffInfo from "./StaffInfo.jsx";
 
 function ExamcellHome({ user }) {
   const {
@@ -97,6 +98,9 @@ function ExamcellHome({ user }) {
                   />
                 }
               />
+
+              <Route path="/StaffInfo" element={<StaffInfo />} />
+
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
