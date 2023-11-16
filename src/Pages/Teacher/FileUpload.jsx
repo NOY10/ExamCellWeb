@@ -13,6 +13,7 @@ function FileUpload({ moduleC, year, department }) {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileImage, setFileImage] = useState(null);
+  const [isDataInserted, setisDataInserted] =  useState(false);
 
   const user = useSelector(selectUser);
 
@@ -121,6 +122,7 @@ function FileUpload({ moduleC, year, department }) {
         // const result = await response.text();
         // console.log(result);
         setClick(!click);
+        sendNoti(dataWithModuleAndClass[0].tid,dataWithModuleAndClass[0].code,dataWithModuleAndClass[0].semester);
         alert("Data inserted successfully!");
       } else {
         console.error("Error inserting data:", response.statusText);
@@ -131,6 +133,55 @@ function FileUpload({ moduleC, year, department }) {
       alert("Failed to insert data. Please check the console for details.");
     }
   };
+
+  const sendNoti = async(userID, module, semester) => {
+    try {
+      const notificationData = {
+        tid: userID,
+        mid: module,
+        semester: semester
+      };
+  
+      const url = `https://resultsystemdb.000webhostapp.com/notiTutor.php?tid=${notificationData.tid}&mid=${notificationData.mid}&semester=${notificationData.semester}`;
+  
+      const response = await fetch(url);
+  
+      if (response.ok) {
+        const successMsg = await response.text();
+        console.log(successMsg); // Log success message if request is successful
+      } else {
+        console.error('Data Already exists', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const deleteNoti = async() => {
+    try {
+      // const notificationData = {
+      //   tid: userID,
+      //   mid: module,
+      //   semester: semester
+      // };
+  
+      const url = `https://resultsystemdb.000webhostapp.com/deleteNoti.php?mid=${moduleC}`;
+  
+      const response = await fetch(url);
+
+      console.log(moduleC);
+  
+      if (response.ok) {
+        const successMsg = await response.text();
+        console.log(successMsg); // Log success message if request is successful
+      } else {
+        console.error('Data Already deleted', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
 
   //delete btn
   const [isConfirmDialogOpenDelete, setIsConfirmDialogOpenDelete] =
@@ -167,6 +218,7 @@ function FileUpload({ moduleC, year, department }) {
     try {
       // Move the useEffect outside of the confirmDelete function
       fetchDelete();
+      deleteNoti();
     } catch (error) {
       console.error("Error deleting data to the server:", error);
       alert("NO");
