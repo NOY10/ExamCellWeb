@@ -31,7 +31,6 @@ const UserProfile = () => {
           color="rgb(153, 171, 180)"
           bgHoverColor="light-gray"
           size="2xl"
-          borderRadius="50%"
         />
       </div>
       <div className="flex gap-5 items-center mt-6 border-color border-b-1 pb-6">
@@ -43,15 +42,15 @@ const UserProfile = () => {
         <div>
           <p className="font-semibold text-xl dark:text-gray-200">
             {" "}
-            {user.name}{" "}
+            {/* {user.name}{" "} */}Lobzang
           </p>
           <p className="text-gray-500 text-sm dark:text-gray-400">
             {" "}
-            {user.role}{" "}
+            {/* {user.role}{" "} */}nfe
           </p>
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
             {" "}
-            {user.email}{" "}
+            {/* {user.email}{" "} */}jfe
           </p>
         </div>
       </div>

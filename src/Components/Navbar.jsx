@@ -13,7 +13,7 @@ import { selectUser } from "../features/userSlice";
 import { useSelector } from "react-redux";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
-  <TooltipComponent content={title} position="BottomCenter">
+  <div content={title} position="BottomCenter">
     <button
       type="button"
       onClick={() => customFunc()}
@@ -26,7 +26,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
       />
       {icon}
     </button>
-  </TooltipComponent>
+  </div>
 );
 
 const Navbar = () => {
@@ -91,7 +91,7 @@ const Navbar = () => {
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{" "}
               <span className="text-gray-400 font-bold ml-1 text-14">
-                {user.name.split(" ")[0]}
+                {/* {user.name.split(" ")[0]} */}lobzang Yonten
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />

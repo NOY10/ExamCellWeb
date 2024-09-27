@@ -67,7 +67,8 @@ function ExamcellHome({ user }) {
           }
         >
           <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
-            <Navbar uid={user.uid} />
+            {/* <Navbar uid={user.uid} /> */}
+            <Navbar />
           </div>
           <div>
             {themeSettings && <ThemeSettings />}
